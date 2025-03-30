@@ -7,9 +7,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
-
-	"go.alis.build/alog"
 )
 
 type Client struct {
@@ -17,12 +14,7 @@ type Client struct {
 }
 
 // Create a new paystack client. Panics if PAYSTACK_SECRET env not set.
-func NewClient() *Client {
-	secret := os.Getenv("PAYSTACK_SECRET")
-	ctx := context.Background()
-	if secret == "" {
-		alog.Fatal(ctx, "PAYSTACK_SECRET env var not set")
-	}
+func NewClient(secret string) *Client {
 	return &Client{
 		secret: secret,
 	}
