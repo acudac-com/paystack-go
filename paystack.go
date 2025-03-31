@@ -89,16 +89,17 @@ type InitializedTransaction struct {
 
 // Initializes a new transaction for the customer with the given email.
 // Amount is in the smallest unit, e.g. cents instead of ZAR.
-func (c *Client) InitializeTransaction(ctx context.Context, email string, amount int32) (*InitializedTransaction, error) {
+func (c *Client) InitializeTransaction(ctx context.Context, email string, amount int32, callbackUrl string) (*InitializedTransaction, error) {
 	type InitTransactionReq struct {
-		Email  string `json:"email"`
-		Amount string `json:"amount"`
+		Email       string `json:"email"`
+		Amount      string `json:"amount"`
+		CallbackUrl string `json:"callback_url"`
 	}
 	type InitTransactionResp struct {
 		Data *InitializedTransaction
 	}
 	url := "https://api.paystack.co/transaction/initialize"
-	reqBody := &InitTransactionReq{Email: email, Amount: fmt.Sprintf("%d", amount)}
+	reqBody := &InitTransactionReq{email, fmt.Sprintf("%d", amount), callbackUrl}
 	respBody := &InitTransactionResp{}
 	err := c.request(ctx, url, "POST", reqBody, respBody)
 	if err != nil {
